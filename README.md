@@ -1,35 +1,41 @@
-# Etapa 3: login real com PocketBase
+# Etapa 3: autenticar com PocketBase
 
-Nesta etapa, trocamos a simulação por uma chamada ao PocketBase.
+## Objetivo
 
-## Conceitos
+Trocar a resposta local do formulário por uma chamada real de autenticação.
 
-- O SDK é uma biblioteca que facilita as chamadas HTTP para o PocketBase.
-- authWithPassword envia e-mail e senha para a coleção de autenticação.
-- A resposta inclui o registro autenticado e um token.
-- O SDK guarda o token no armazenamento local do navegador, para a outra página recuperar o estado.
+## Observe no código
+
+- O SDK cria window.pb para conversar com o PocketBase.
+- collection('users') aponta para a coleção Auth dos alunos.
+- authWithPassword envia e-mail e senha ao servidor.
+- await espera a resposta; try/catch trata sucesso e erro.
+- O SDK guarda o token e o registro autenticado no navegador.
 
 ## Preparar o PocketBase
 
-1. Baixe e inicie o PocketBase: .\pocketbase.exe serve
+1. Baixe o PocketBase e rode .\pocketbase.exe serve.
 2. Abra http://127.0.0.1:8090/_/ e crie uma coleção do tipo Auth chamada users.
-3. Crie um registro de usuário com e-mail e senha.
-
-## Abrir o projeto
+3. Cadastre um usuário com e-mail e senha nessa coleção.
 
 Em outro terminal, dentro da pasta do projeto:
 
     py -m http.server 5500
 
-Abra http://127.0.0.1:5500/login.html e entre com o usuário cadastrado.
+Abra http://127.0.0.1:5500/login.html.
 
-## Atenção
+## Experimente
 
-A área do aluno ainda não bloqueia quem abre logado.html diretamente. Vamos cuidar disso na etapa 4.
+1. Tente entrar com uma senha errada e observe a mensagem.
+2. Entre com o usuário cadastrado e veja o e-mail em logado.html.
+3. Abra logado.html diretamente em outra sessão do navegador.
 
-## Próxima etapa
+A última ação mostra um limite desta etapa: a página ainda pode ser aberta diretamente. O controle do estado e a confirmação da sessão no servidor virão na etapa 4.
 
-Na branch etapa-04-pagina-protegida, a página vai conferir o estado do login e permitir sair.
 ## Material de apoio
 
 Consulte output/pdf/guia-passo-a-passo-login-pocketbase-alpine.pdf para o passo a passo completo.
+
+## Próxima etapa
+
+Na branch etapa-04-sessao-e-saida, vamos confirmar a sessão e implementar o botão Sair.
