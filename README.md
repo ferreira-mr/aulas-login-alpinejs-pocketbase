@@ -22,3 +22,6 @@ Abra http://127.0.0.1:5500/login.html.
 ## Próxima etapa
 
 Na branch etapa-03-login-pocketbase, vamos trocar a simulação por authWithPassword do PocketBase.
+## Material de apoio
+
+Consulte output/pdf/guia-passo-a-passo-login-pocketbase-alpine.pdf para o passo a passo completo.
