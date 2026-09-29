@@ -1,34 +1,9 @@
-# Etapa 2: formulário com Alpine.js
+# Etapa 2 - reatividade com Alpine.js
 
-## Objetivo
+Os arquivos continuam separados desde a primeira etapa. Agora `js/login.js` define a função `formulario()`, e o Alpine.js liga o campo de e-mail à variável `email`. O texto muda enquanto você digita.
 
-Ler os campos do formulário e responder ao envio sem recarregar a página.
+Conceitos: `x-data` cria o estado, `x-model` acompanha o campo e `x-text` mostra o valor na página. O botão Entrar continua desativado. Não há envio do formulário nem autenticação nesta etapa.
 
-## Observe no código
+Para visualizar, execute `py -m http.server 5500` nesta pasta e abra `http://127.0.0.1:5500/login.html`. O navegador precisa de internet para carregar Alpine.js pela CDN. Se `py` não funcionar, use `python -m http.server 5500`.
 
-- x-data guarda as variáveis e a função da tela.
-- x-model acompanha o valor digitado.
-- @submit.prevent chama enviar() sem o envio padrão do navegador.
-- x-show e x-text apresentam o erro ou a mensagem.
-
-Nesta etapa, o código apenas mostra uma mensagem local. Ele não compara senhas, não envia dados e não abre logado.html. Um e-mail precisa ter formato válido por causa do tipo do campo HTML.
-
-## Experimente
-
-1. Envie os campos vazios e leia o erro.
-2. Digite um e-mail válido e uma senha qualquer e envie.
-3. Observe que o campo senha é limpo e seu conteúdo nunca aparece na mensagem.
-
-Inicie o servidor de arquivos na pasta do projeto:
-
-    py -m http.server 5500
-
-Abra http://127.0.0.1:5500/login.html.
-
-## Material de apoio
-
-Consulte output/pdf/guia-passo-a-passo-login-pocketbase-alpine.pdf para o passo a passo completo.
-
-## Próxima etapa
-
-Na branch etapa-03-login-pocketbase, authWithPassword vai enviar as credenciais ao PocketBase.
+Próxima etapa: `etapa-03-login-pocketbase`. Guia completo: `output/pdf/guia-passo-a-passo-login-pocketbase-alpine.pdf`.

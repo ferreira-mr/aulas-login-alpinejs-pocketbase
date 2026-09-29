@@ -3,61 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Etapa 2 - Formulário com Alpine.js</title>
-    <style>
-      [x-cloak] { display: none !important; }
-      body { max-width: 420px; margin: 60px auto; padding: 0 20px; font-family: Arial, sans-serif; }
-      label { display: block; margin-top: 16px; }
-      input { width: 100%; padding: 10px; box-sizing: border-box; }
-      button { margin-top: 20px; padding: 10px 16px; color: white; background: #2563eb; border: 0; cursor: pointer; }
-      .erro { color: #b91c1c; }
-      .mensagem { color: #0f766e; }
-    </style>
+    <title>Login dos alunos</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+    <!-- Primeiro vem nossa função; depois o Alpine lê x-data. -->
+    <script defer src="js/login.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
   </head>
   <body>
-    <main x-data="formulario()" x-cloak>
+    <!-- x-data cria o estado desta parte da página. -->
+    <main class="cartao" x-data="formulario()" x-cloak>
       <h1>Entrar</h1>
-      <p>Etapa 2: o formulário responde ao envio, mas ainda não faz login.</p>
+      <p>Digite um e-mail e veja o texto mudar enquanto escreve.</p>
 
-      <form @submit.prevent="enviar">
-        <label for="email">E-mail</label>
-        <input id="email" type="email" x-model="email" />
+      <label for="email">E-mail</label>
+      <!-- x-model guarda o valor digitado na variável email. -->
+      <input id="email" type="email" x-model="email" placeholder="aluno@escola.com" />
 
-        <label for="senha">Senha</label>
-        <input id="senha" type="password" x-model="senha" />
+      <!-- x-text mostra o valor da variável, sem enviar nada ao servidor. -->
+      <p x-show="email">E-mail digitado: <strong x-text="email"></strong></p>
 
-        <p class="erro" x-show="erro" x-text="erro" role="alert"></p>
-        <p class="mensagem" x-show="mensagem" x-text="mensagem" role="status"></p>
-        <button type="submit">Enviar formulário</button>
-      </form>
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" placeholder="Sua senha" />
+      <button type="button" disabled>Entrar (na próxima etapa)</button>
+
+      <p><a href="logado.html">Conhecer a segunda página</a></p>
     </main>
-
-    <script>
-      function formulario() {
-        return {
-          email: '',
-          senha: '',
-          erro: '',
-          mensagem: '',
-
-          enviar() {
-            this.erro = '';
-            this.mensagem = '';
-
-            // Nesta etapa só lemos os campos no navegador.
-            if (!this.email.trim() || !this.senha) {
-              this.erro = 'Preencha o e-mail e a senha.';
-              return;
-            }
-
-            // Não mostramos a senha na tela nem enviamos os dados a um servidor.
-            this.mensagem = 'Formulário preenchido para ' + this.email
-              + '. O login será criado na próxima etapa.';
-            this.senha = '';
-          },
-        };
-      }
-    </script>
   </body>
 </html>
