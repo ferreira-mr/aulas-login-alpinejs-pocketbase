@@ -1,22 +1,31 @@
-document.addEventListener('alpine:init', () => {
-  Alpine.data('paginaLogado', () => ({
+// A mesma função foi usada na etapa 4; aqui apenas saiu do HTML.
+function paginaLogada() {
+  return {
     usuario: null,
+    verificando: true,
 
-    init() {
-      // Sem login válido, voltamos ao formulário antes de mostrar o conteúdo.
+    async init() {
+      // isValid olha apenas o token salvo e seu prazo de validade.
       if (!window.pb.authStore.isValid) {
         window.location.replace('login.html');
         return;
       }
 
-      // O SDK guarda o registro do aluno junto ao token de autenticação.
-      this.usuario = window.pb.authStore.record;
+      try {
+        // authRefresh confirma o token com o PocketBase e atualiza o usuário.
+        await window.pb.collection('users').authRefresh();
+        this.usuario = window.pb.authStore.record;
+      } catch (erro) {
+        window.pb.authStore.clear();
+        window.location.replace('login.html');
+      } finally {
+        this.verificando = false;
+      }
     },
 
     sair() {
-      // Limpa o token salvo neste navegador e encerra o fluxo da interface.
       window.pb.authStore.clear();
-      window.location.href = 'login.html';
+      window.location.replace('login.html');
     },
-  }));
-});
+  };
+}

@@ -6,22 +6,27 @@
     <title>Área do aluno</title>
     <link rel="stylesheet" href="css/estilo.css" />
 
-    <!-- Use a mesma ordem de scripts da página de login. -->
+    <!-- Mesma ordem da página de login: SDK, configuração, página e Alpine. -->
     <script defer src="https://cdn.jsdelivr.net/npm/pocketbase@0.28.1/dist/pocketbase.umd.js"></script>
     <script defer src="js/pocketbase.js"></script>
     <script defer src="js/logado.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
   </head>
   <body>
-    <!-- O componente valida o login antes de mostrar o conteúdo. -->
-    <main class="cartao" x-data="paginaLogado" x-cloak>
-      <h1>Área do aluno</h1>
-      <div class="boas-vindas">
-        <p>Você entrou com:</p>
-        <strong x-text="usuario && usuario.email"></strong>
-      </div>
-      <p>Este é o conteúdo disponível depois do login.</p>
-      <button class="botao-secundario" type="button" @click="sair">Sair</button>
+    <!-- A função paginaLogada vem de js/logado.js. -->
+    <main class="cartao" x-data="paginaLogada()" x-cloak>
+      <p x-show="verificando" role="status">Verificando login...</p>
+
+      <!-- O conteúdo só aparece após a resposta do PocketBase. -->
+      <section x-show="usuario">
+        <h1>Área do aluno</h1>
+        <div class="boas-vindas">
+          <p>Você entrou com:</p>
+          <strong x-text="usuario && usuario.email"></strong>
+        </div>
+        <p>O PocketBase confirmou este login.</p>
+        <button class="botao-secundario" type="button" @click="sair">Sair</button>
+      </section>
     </main>
   </body>
 </html>

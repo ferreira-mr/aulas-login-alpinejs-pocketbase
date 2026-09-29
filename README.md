@@ -1,50 +1,46 @@
 # Login simples com PocketBase e Alpine.js
 
-Projeto didático com duas páginas: login e área do aluno. As branches contam a construção do projeto em etapas cumulativas. Comece pela primeira e avance uma etapa por vez.
+Projeto didático com duas páginas: login e área do aluno. As cinco branches mostram o código ao fim de cada etapa da aula. O PDF de apoio acompanha todas elas.
 
-## Branches da aula
+## Etapas da aula
 
-1. etapa-01-html-estatico - marcação HTML e navegação simples entre páginas.
-2. etapa-02-alpine - estado, campos ligados ao Alpine e envio de formulário simulado.
-3. etapa-03-login-pocketbase - autenticação real com e-mail e senha no PocketBase.
-4. etapa-04-pagina-protegida - redirecionamento quando não há login e botão Sair.
-5. etapa-05-arquivos-organizados - versão final com HTML, CSS e JavaScript separados.
+1. etapa-01-html-estatico - conhecer o HTML e a navegação entre duas páginas.
+2. etapa-02-alpine - ler e responder ao formulário no navegador, sem autenticar.
+3. etapa-03-login-pocketbase - usar authWithPassword para entrar de verdade.
+4. etapa-04-sessao-e-saida - confirmar a sessão no PocketBase e implementar Sair.
+5. etapa-05-arquivos-organizados - mover CSS e JavaScript para arquivos próprios.
 
-Para abrir uma etapa:
+Abra uma etapa com git switch etapa-01-html-estatico. Volte ao resultado final com git switch main. As etapas são checkpoints: você pode abrir cada branch, ler os comentários e comparar os arquivos.
 
-    git switch etapa-01-html-estatico
-
-Para voltar à versão final:
-
-    git switch main
-
-O material de apoio em PDF fica em output/pdf/guia-passo-a-passo-login-pocketbase-alpine.pdf.
+O material de apoio fica em output/pdf/guia-passo-a-passo-login-pocketbase-alpine.pdf. A fonte editável do PDF está em material/gerar_guia.py; execute python material/gerar_guia.py para recriá-lo.
 
 ## Preparar o PocketBase
 
-1. Baixe o PocketBase para seu sistema em https://pocketbase.io/ e extraia o arquivo.
-2. Em um terminal na pasta do executável, rode:
+1. Baixe o PocketBase em https://pocketbase.io/ e extraia o arquivo.
+2. Na pasta do executável, rode:
 
        .\pocketbase.exe serve
 
-3. Abra http://127.0.0.1:8090/_/ e crie uma conta de administrador.
+3. Abra http://127.0.0.1:8090/_/ e crie sua conta de administrador.
 4. Crie uma coleção do tipo Auth chamada users.
-5. Na coleção users, crie um registro com e-mail e senha para o aluno.
+5. Na coleção users, cadastre um aluno com e-mail e senha.
 
-## Abrir o projeto
+## Abrir as páginas
 
-Com o PocketBase rodando, abra outro terminal nesta pasta e inicie um servidor para os arquivos:
+Com o PocketBase rodando, abra outro terminal nesta pasta:
 
     py -m http.server 5500
 
-Abra http://127.0.0.1:5500/login.html. Se py não funcionar, use python -m http.server 5500.
+Abra http://127.0.0.1:5500/login.html. Se py não funcionar, tente python -m http.server 5500.
 
-## Como funciona
+Use 127.0.0.1 de forma consistente no navegador e na configuração para manter o login salvo na mesma origem. O navegador precisa de internet para carregar Alpine.js e o SDK pelos links CDN.
 
-- login.html tem o formulário; Alpine chama a função entrar quando o aluno envia.
-- js/login.js usa authWithPassword para conferir as credenciais na coleção users.
-- js/logado.js confere o token salvo, mostra o e-mail e permite sair.
-- js/pocketbase.js guarda o endereço do servidor.
-- css/estilo.css contém os estilos compartilhados pelas duas páginas.
+## Onde está cada parte
 
-A verificação em logado.html controla a interface no navegador. Para proteger dados, configure também as regras de acesso das coleções no PocketBase.
+- login.html e logado.html contêm as duas páginas.
+- css/estilo.css contém os estilos das duas páginas.
+- js/pocketbase.js guarda o endereço do PocketBase.
+- js/login.js envia e-mail e senha para a coleção users.
+- js/logado.js confirma a sessão com authRefresh, mostra o e-mail e limpa o login ao sair.
+
+O HTML e o JavaScript da interface podem ser baixados pelo navegador. Quando você adicionar dados privados, configure regras de API nas coleções do PocketBase. Por exemplo, para permitir listar e visualizar registros somente a usuários autenticados, use a regra @request.auth.id != "".

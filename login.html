@@ -6,22 +6,22 @@
     <title>Login dos alunos</title>
     <link rel="stylesheet" href="css/estilo.css" />
 
-    <!-- Carregamos os scripts em ordem: SDK, configuração, componente e Alpine. -->
+    <!-- A ordem permite que cada script encontre a biblioteca de que precisa. -->
     <script defer src="https://cdn.jsdelivr.net/npm/pocketbase@0.28.1/dist/pocketbase.umd.js"></script>
     <script defer src="js/pocketbase.js"></script>
     <script defer src="js/login.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
   </head>
   <body>
-    <!-- O nome loginApp conecta este HTML ao componente definido em js/login.js. -->
-    <main class="cartao" x-data="loginApp" x-cloak>
+    <!-- A função loginComPocketBase vem de js/login.js. -->
+    <main class="cartao" x-data="loginComPocketBase()" x-cloak>
       <h1>Entrar</h1>
       <p>Use seu e-mail e sua senha para acessar.</p>
 
       <!-- @submit.prevent chama entrar sem recarregar esta página. -->
       <form @submit.prevent="entrar">
         <label for="email">E-mail</label>
-        <!-- x-model mantém o valor do campo na variável email do Alpine. -->
+        <!-- x-model mantém o campo ligado à variável email. -->
         <input
           id="email"
           type="email"
@@ -39,7 +39,6 @@
           required
         />
 
-        <!-- A mensagem só aparece quando a variável erro contém texto. -->
         <p class="mensagem-erro" x-show="erro" x-text="erro" role="alert"></p>
         <button type="submit" :disabled="carregando">
           <span x-text="carregando ? 'Entrando...' : 'Entrar'"></span>
