@@ -30,3 +30,6 @@ A área do aluno ainda não bloqueia quem abre logado.html diretamente. Vamos cu
 ## Próxima etapa
 
 Na branch etapa-04-pagina-protegida, a página vai conferir o estado do login e permitir sair.
+## Material de apoio
+
+Consulte output/pdf/guia-passo-a-passo-login-pocketbase-alpine.pdf para o passo a passo completo.
