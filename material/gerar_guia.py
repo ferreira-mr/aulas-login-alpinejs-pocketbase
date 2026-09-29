@@ -126,14 +126,13 @@ def aviso(titulo, texto, fundo=FUNDO_AZUL, destaque=AZUL):
 
 def tabela_capa():
     dados = [[p("ETAPA", "cabecalho_tabela"),
-              p("CONCEITO PRINCIPAL", "cabecalho_tabela"),
+              p("IDEIA NOVA", "cabecalho_tabela"),
               p("BRANCH", "cabecalho_tabela")]]
     etapas = [
-        ("01", "HTML e navegação entre páginas", "etapa-01-html-estatico"),
-        ("02", "Formulário reativo, sem autenticação", "etapa-02-alpine"),
-        ("03", "Login real com PocketBase", "etapa-03-login-pocketbase"),
+        ("01", "Arquivos separados e duas páginas", "etapa-01-html-estatico"),
+        ("02", "Alpine mostra o e-mail digitado", "etapa-02-alpine"),
+        ("03", "PocketBase autentica a conta", "etapa-03-login-pocketbase"),
         ("04", "Confirmar sessão e sair", "etapa-04-sessao-e-saida"),
-        ("05", "Organizar os arquivos", "etapa-05-arquivos-organizados"),
     ]
     for numero, conceito, branch in etapas:
         dados.append([p(numero, "celula_forte"), p(conceito, "celula"), p(branch, "celula")])
@@ -185,318 +184,347 @@ doc = SimpleDocTemplate(
     str(DESTINO), pagesize=A4,
     leftMargin=20 * mm, rightMargin=20 * mm,
     topMargin=23 * mm, bottomMargin=22 * mm,
-    title="Guia passo a passo: login com PocketBase e Alpine.js",
+    title="Guia do aluno: login com PocketBase e Alpine.js",
     author="Material de apoio para alunos",
 )
 historia = []
 
-# Capa
+# 1. Capa
 historia += [
-    Spacer(1, 19 * mm),
+    Spacer(1, 17 * mm),
     p("CADERNO DE APOIO | PROJETO GUIADO", "sobretitulo"),
     p("Login simples com<br/>PocketBase e Alpine.js", "capa"),
-    p("Duas páginas, um formulário e uma autenticação. Vamos construir cada ideia em uma etapa.", "subcapa"),
+    p("Construa duas páginas, entenda cada tecnologia e depois repita o projeto sem acompanhar o professor.", "subcapa"),
     Spacer(1, 5 * mm),
-    aviso(
-        "O que vamos construir",
-        "O navegador mostra as páginas. Alpine.js lê os campos e responde aos eventos. PocketBase confere a conta do aluno no servidor.",
-        FUNDO_AZUL, VERDE,
-    ),
-    Spacer(1, 7 * mm),
-    p("As cinco etapas", "secao"),
-    tabela_capa(),
+    aviso("A pergunta do projeto", "Como saber se quem abriu a segunda página realmente informou uma conta válida? Um link não responde a isso. Vamos avançar até a confirmação no servidor.", FUNDO_AZUL, VERDE),
     Spacer(1, 8 * mm),
-    aviso(
-        "Como usar este guia",
-        "Abra a branch de cada etapa, leia os comentários nos arquivos e faça os experimentos. Cada branch mostra o código completo daquele momento da aula.",
-        FUNDO, AZUL,
-    ),
+    p("Quatro etapas, uma ideia nova por vez", "secao"),
+    tabela_capa(),
+    Spacer(1, 9 * mm),
+    aviso("Como estudar", "Leia a explicação, digite o trecho de código, faça o experimento e responda à pergunta de cada etapa. As branches mostram o resultado esperado quando você precisar comparar.", FUNDO, AZUL),
     p("Público: alunos iniciantes em HTML, CSS e JavaScript.", "pequeno"),
     PageBreak(),
 ]
 
-# 2. Visão geral e preparação
+# 2. Contexto e mapa
 historia += [
-    p("Antes de começar", "titulo"),
-    p("O aluno informa e-mail e senha. A página envia esses valores ao PocketBase. Se o servidor aceitar a conta, o navegador abre a área do aluno.", "corpo"),
-    codigo("aluno -> login.html -> Alpine.js -> PocketBase -> logado.html"),
-    Spacer(1, 5),
-    p("Papel de cada tecnologia", "secao"),
-]
-linhas = [
-    [p("TECNOLOGIA", "cabecalho_tabela"), p("PAPEL", "cabecalho_tabela")],
-    [p("HTML", "celula_forte"), p("Cria as duas páginas, os campos e os botões.", "celula")],
-    [p("CSS", "celula_forte"), p("Define aparência e espaçamento.", "celula")],
-    [p("Alpine.js", "celula_forte"), p("Liga valores dos campos ao JavaScript e responde aos eventos.", "celula")],
-    [p("PocketBase", "celula_forte"), p("Guarda contas e valida as credenciais no servidor.", "celula")],
-]
-tabela = Table(linhas, colWidths=[37 * mm, 133 * mm])
-tabela.setStyle(TableStyle([
-    ("BACKGROUND", (0, 0), (-1, 0), AZUL_ESCURO),
-    ("GRID", (0, 0), (-1, -1), 0.45, BORDA),
-    ("VALIGN", (0, 0), (-1, -1), "TOP"),
-    ("LEFTPADDING", (0, 0), (-1, -1), 7),
-    ("RIGHTPADDING", (0, 0), (-1, -1), 7),
-    ("TOPPADDING", (0, 0), (-1, -1), 6),
-    ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-]))
-historia += [
-    tabela, Spacer(1, 7),
-    p("Prepare o PocketBase", "secao"),
+    p("Entenda o problema antes do código", "titulo"),
+    p("Uma escola quer uma tela de entrada e uma área do aluno. O navegador desenha as telas; o PocketBase guarda as contas e decide se e-mail e senha correspondem a um usuário cadastrado.", "corpo"),
+    codigo("aluno -> login.html -> Alpine.js -> PocketBase\n                              <- resposta\n         -> logado.html (após sucesso)"),
+    p("Quem faz o quê?", "secao"),
     *itens([
-        "Baixe o PocketBase para seu sistema e extraia o executável.",
-        "Inicie o servidor com o comando abaixo.",
-        "Abra http://127.0.0.1:8090/_/ e crie uma conta de administrador.",
-        "Crie uma coleção do tipo Auth chamada users e cadastre um aluno com e-mail e senha.",
+        "<b>HTML</b> organiza títulos, campos, botões e links.",
+        "<b>CSS</b> define aparência e espaçamento.",
+        "<b>JavaScript</b> executa as ações programadas.",
+        "<b>Alpine.js</b> liga valores do JavaScript aos elementos HTML.",
+        "<b>PocketBase</b> confere as credenciais no servidor e emite a sessão.",
+    ]),
+    p("Três ideias que parecem iguais, mas não são", "secao"),
+    *itens([
+        "<b>Navegar</b>: abrir outro arquivo por um link. Qualquer pessoa pode fazê-lo.",
+        "<b>Reagir</b>: atualizar o texto da página quando algo é digitado. Isso ocorre no navegador.",
+        "<b>Autenticar</b>: pedir ao servidor para verificar uma conta.",
+    ]),
+    aviso("O que você vai produzir", "Desde o começo haverá login.html, logado.html, css/estilo.css, js/login.js e js/logado.js. O arquivo js/pocketbase.js será criado na etapa 3.", FUNDO_AZUL, AZUL),
+    p("Depois da explicação do professor, use as páginas 11 e 12 para reconstruir tudo sozinho.", "pequeno"),
+    PageBreak(),
+]
+
+# 3. Ambiente
+historia += [
+    p("Prepare seu ambiente", "titulo"),
+    p("Você precisa de um editor, navegador, Python para servir os arquivos e PocketBase para as etapas 3 e 4. As bibliotecas Alpine.js e SDK do PocketBase são carregadas por CDN; mantenha internet ativa.", "corpo"),
+    p("1. Crie a pasta do projeto", "secao"),
+    codigo("login-simples/\n  login.html\n  logado.html\n  css/estilo.css\n  js/login.js\n  js/logado.js"),
+    p("2. Sirva os arquivos no navegador", "secao"),
+    p("Abra um terminal dentro de login-simples e execute:", "corpo"),
+    codigo("py -m http.server 5500\n# alternativa: python -m http.server 5500"),
+    p("Acesse http://127.0.0.1:5500/login.html. Não feche esse terminal enquanto estiver trabalhando.", "corpo"),
+    p("3. Prepare o PocketBase antes da etapa 3", "secao"),
+    *itens([
+        "Baixe e extraia o PocketBase pelo site oficial: pocketbase.io.",
+        "Em outro terminal, na pasta do executável, rode o comando abaixo.",
+        "Abra http://127.0.0.1:8090/_/ e crie o administrador.",
+        "Crie uma coleção do tipo Auth chamada users e um aluno fictício com e-mail e senha.",
     ]),
     codigo(r".\pocketbase.exe serve"),
-    Spacer(1, 6),
-    p("Abra as páginas", "secao"),
-    p("Mantenha o PocketBase rodando. Em outro terminal, na pasta do projeto:", "corpo"),
-    codigo("py -m http.server 5500\nhttp://127.0.0.1:5500/login.html"),
-    Spacer(1, 6),
-    aviso(
-        "Use o mesmo endereço",
-        "Neste projeto, use 127.0.0.1 no navegador e em js/pocketbase.js. localhost e 127.0.0.1 podem ter armazenamentos de login separados.",
-        FUNDO, LARANJA,
-    ),
+    aviso("Dois servidores", "A interface usa a porta 5500. O PocketBase usa a porta 8090. O navegador chama o PocketBase quando o aluno envia o formulário.", FUNDO_AZUL, VERDE),
     PageBreak(),
 ]
 
-# 3. HTML
+# 4. Etapa 1 HTML
 historia += [
-    p("Etapa 1 | HTML estático", "titulo"),
-    p("Branch: <b>etapa-01-html-estatico</b>", "pequeno"),
-    p("As duas páginas já existem. O objetivo é reconhecer os elementos HTML e entender que um link apenas navega.", "corpo"),
-    p("O que observar", "secao"),
-    *itens([
-        "h1 identifica o título principal.",
-        "label descreve um campo de input.",
-        "input recebe o texto digitado.",
-        "a com href aponta para outra página.",
-    ]),
-    codigo('<label for="email">E-mail</label>\n<input id="email" type="email">\n<a href="logado.html">Ver a segunda página</a>'),
-    Spacer(1, 8),
-    aviso(
-        "O link não faz login",
-        "Os campos são visuais nesta etapa. A página logado.html pode ser aberta diretamente, mesmo sem e-mail ou senha.",
-        FUNDO_LARANJA, LARANJA,
-    ),
-    p("Faça você mesmo", "secao"),
-    *itens([
-        "Clique em Ver a segunda página sem digitar nada.",
-        "Abra logado.html diretamente na barra de endereços.",
-        "Altere o título h1 e observe a página no navegador.",
-    ]),
-    aviso(
-        "Pense antes de avançar",
-        "O que teria de acontecer para o programa conferir uma conta de aluno? Primeiro vamos aprender a reação do formulário; depois enviaremos dados ao servidor.",
-        FUNDO, VERDE,
-    ),
+    p("Etapa 1 | Monte as duas páginas", "titulo"),
+    p("Branch de referência: etapa-01-html-estatico", "pequeno"),
+    p("Crie os cinco arquivos mostrados na página anterior. Nesta etapa, os JS podem conter apenas um comentário. Isso reserva o lugar do comportamento sem inventar uma função desnecessária.", "corpo"),
+    p("Comece por login.html", "secao"),
+    codigo('''<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login dos alunos</title>
+  <link rel="stylesheet" href="css/estilo.css">
+  <script defer src="js/login.js"></script>
+</head>
+<body>
+  <main class="cartao">
+    <h1>Entrar</h1>
+    <label for="email">E-mail</label>
+    <input id="email" type="email">
+    <label for="senha">Senha</label>
+    <input id="senha" type="password">
+    <button type="button" disabled>Entrar (em breve)</button>
+    <p><a href="logado.html">Conhecer a segunda página</a></p>
+  </main>
+</body>
+</html>'''),
+    p("Em logado.html, use a mesma estrutura head. Troque o título e o conteúdo de main por uma mensagem: 'Você chegou por um link; ainda não existe login'. Acrescente um link de volta para login.html e carregue js/logado.js.", "corpo"),
+    aviso("Experimento", "Abra logado.html sem preencher os campos. Explique por que isso foi possível. O botão está desativado; foi o link que abriu a página.", FUNDO_LARANJA, LARANJA),
     PageBreak(),
 ]
 
-# 4. Alpine
+# 5. Etapa 1 CSS e caminhos
 historia += [
-    p("Etapa 2 | Formulário com Alpine.js", "titulo"),
-    p("Branch: <b>etapa-02-alpine</b>", "pequeno"),
-    p("Alpine.js liga os campos a variáveis. O envio chama uma função, que mostra uma mensagem na própria página. Ainda não existe autenticação.", "corpo"),
-    p("Quatro atributos importantes", "secao"),
+    p("Etapa 1 | Dê forma e entenda os caminhos", "titulo"),
+    p("Escreva em css/estilo.css um estilo pequeno. Você pode ampliar as cores e espaçamentos depois, sem alterar o funcionamento do login.", "corpo"),
+    codigo(''':root {
+  font-family: Arial, sans-serif;
+  color: #1f2937;
+  background: #f3f4f6;
+}
+* { box-sizing: border-box; }
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: grid;
+  place-items: center;
+}
+.cartao {
+  width: min(100%, 380px);
+  padding: 32px;
+  background: white;
+  border: 1px solid #e5e7eb;
+}
+label { display: block; margin-top: 16px; }
+input { width: 100%; padding: 10px; }
+button { margin-top: 20px; }
+'''),
+    p("No HTML, o caminho css/estilo.css começa na mesma pasta do HTML. O navegador procura a pasta css e depois o arquivo estilo.css. O mesmo raciocínio vale para js/login.js.", "corpo"),
+    p("Confira sua etapa", "secao"),
     *itens([
-        "x-data define os dados e as funções desta parte do HTML.",
-        "x-model acompanha o valor digitado.",
-        "@submit.prevent chama enviar() sem recarregar a página.",
-        "x-show e x-text mostram a mensagem apropriada.",
+        "As duas páginas têm conteúdo e estilos.",
+        "Mudar a cor em css/estilo.css altera as duas páginas.",
+        "O botão Entrar não faz nada; o link abre a segunda página.",
+        "js/login.js e js/logado.js existem, mas ainda não executam ações.",
     ]),
-    codigo('<main x-data="formulario()">\n  <form @submit.prevent="enviar">\n    <input x-model="email">\n    <p x-show="mensagem" x-text="mensagem"></p>\n  </form>\n</main>'),
-    Spacer(1, 8),
-    aviso(
-        "O que o código faz",
-        "Ele lê os campos e exibe uma confirmação local. Não compara senhas, não envia dados ao servidor e não abre a área do aluno. A senha é limpa e não aparece na mensagem.",
-        FUNDO_AZUL, VERDE,
-    ),
-    p("Faça você mesmo", "secao"),
-    *itens([
-        "Envie os campos vazios e observe o erro.",
-        "Use um e-mail com formato válido e uma senha qualquer.",
-        "Veja a mensagem e confirme que a senha não aparece nela.",
-    ]),
-    aviso(
-        "Conceito-chave",
-        "O estado de x-data vive na página. Ele serve para controlar a interface; uma mensagem de sucesso na tela não comprova a identidade de ninguém.",
-        FUNDO_LARANJA, LARANJA,
-    ),
+    aviso("Pergunta de compreensão", "Se você apagar o link e mantiver os campos, alguém consegue chegar à segunda página digitando e-mail e senha? Por quê?", FUNDO_AZUL, VERDE),
     PageBreak(),
 ]
 
-# 5. PocketBase
+# 6. Etapa 2
 historia += [
-    p("Etapa 3 | Login com PocketBase", "titulo"),
-    p("Branch: <b>etapa-03-login-pocketbase</b>", "pequeno"),
-    p("Agora o formulário chama o PocketBase. A coleção users deve ser do tipo Auth e conter o aluno que você vai usar no experimento.", "corpo"),
-    p("O endereço do servidor", "secao"),
+    p("Etapa 2 | Veja Alpine.js reagir", "titulo"),
+    p("Branch de referência: etapa-02-alpine", "pequeno"),
+    p("Alpine.js vai copiar para a tela o e-mail enquanto você digita. Não há envio nem autenticação. O botão continua desativado.", "corpo"),
+    p("1. Carregue a biblioteca depois do seu JS", "secao"),
+    codigo('''<script defer src="js/login.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>'''),
+    p("A ordem importa: sua função precisa existir quando Alpine iniciar.", "pequeno"),
+    p("2. Acrescente os atributos ao HTML", "secao"),
+    codigo('''<main class="cartao" x-data="formulario()" x-cloak>
+  <label for="email">E-mail</label>
+  <input id="email" type="email" x-model="email">
+  <p x-show="email">E-mail digitado:
+    <strong x-text="email"></strong>
+  </p>
+  <!-- Mantenha o campo de senha e o botão desativado. -->
+</main>'''),
+    p("3. Escreva js/login.js", "secao"),
+    codigo("function formulario() {\n  return { email: '' };\n}"),
+    p("x-data cria o estado; x-model atualiza email; x-text exibe esse valor; x-show esconde o parágrafo quando ele está vazio. Em CSS, adicione [x-cloak] { display: none !important; } para evitar texto incompleto antes de Alpine iniciar.", "corpo"),
+    aviso("Experimente", "Digite e apague um e-mail. A tela muda imediatamente. Verifique que logado.html ainda pode ser aberta pelo link e que nenhuma senha foi enviada.", FUNDO_AZUL, VERDE),
+    PageBreak(),
+]
+
+# 7. Etapa 3: serviço e HTML
+historia += [
+    p("Etapa 3 | Conecte o PocketBase", "titulo"),
+    p("Branch de referência: etapa-03-login-pocketbase", "pequeno"),
+    p("Só agora o botão Entrar ganha uma ação. Antes, confirme que o PocketBase está rodando e que a coleção Auth users contém um aluno.", "corpo"),
+    p("1. Crie js/pocketbase.js", "secao"),
     codigo("window.pb = new PocketBase('http://127.0.0.1:8090');"),
-    p("O SDK é uma biblioteca que prepara as chamadas à API e mantém o estado do login no navegador.", "corpo"),
-    p("A chamada de autenticação", "secao"),
-    codigo("await window.pb\n  .collection('users')\n  .authWithPassword(this.email, this.senha);"),
-    *itens([
-        "collection('users') escolhe a coleção das contas dos alunos.",
-        "authWithPassword pede ao servidor que confira e-mail e senha.",
-        "await aguarda a resposta antes do redirecionamento.",
-        "try/catch separa o resultado aceito do erro.",
-    ]),
-    p("Após o login, o SDK guarda um token e um registro de usuário. A página abre logado.html. Esta etapa ainda permite abrir logado.html diretamente sem uma confirmação adicional.", "corpo"),
-    aviso(
-        "Token em poucas palavras",
-        "O servidor emite um token após aceitar as credenciais. O SDK o guarda no navegador e o envia em pedidos autenticados posteriores.",
-        FUNDO_AZUL, AZUL,
-    ),
-    p("Faça você mesmo", "secao"),
-    *itens([
-        "Tente entrar com uma senha errada.",
-        "Entre com o aluno cadastrado no painel do PocketBase.",
-        "Abra logado.html em uma janela anônima e observe o limite desta etapa.",
-    ]),
+    p("2. Em login.html, carregue os scripts nesta ordem", "secao"),
+    codigo('''<script defer src="https://cdn.jsdelivr.net/npm/pocketbase@0.28.1/dist/pocketbase.umd.js"></script>
+<script defer src="js/pocketbase.js"></script>
+<script defer src="js/login.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>'''),
+    p("O SDK define PocketBase; o arquivo de configuração cria window.pb; js/login.js define a função; Alpine lê x-data por último.", "corpo"),
+    p("3. Transforme os campos em formulário", "secao"),
+    codigo('''<main class="cartao" x-data="loginComPocketBase()">
+  <form @submit.prevent="entrar">
+    <input type="email" x-model="email" required>
+    <input type="password" x-model="senha" required>
+    <p x-show="erro" x-text="erro" role="alert"></p>
+    <button type="submit" :disabled="carregando">
+      <span x-text="carregando ? 'Entrando...' : 'Entrar'"></span>
+    </button>
+  </form>
+</main>'''),
+    p("Mantenha as labels dos dois campos. @submit.prevent executa entrar() e evita o recarregamento automático da página.", "corpo"),
     PageBreak(),
 ]
 
-# 6. Sessão
+# 8. Etapa 3: lógica
 historia += [
-    p("Etapa 4 | Confirmar a sessão e sair", "titulo"),
-    p("Branch: <b>etapa-04-sessao-e-saida</b>", "pequeno"),
-    p("Ao abrir a área do aluno, usamos dois passos: primeiro verificamos o token salvo localmente; depois pedimos ao PocketBase para confirmá-lo.", "corpo"),
-    codigo("if (!window.pb.authStore.isValid) {\n  window.location.replace('login.html');\n  return;\n}\nawait window.pb.collection('users').authRefresh();"),
-    Spacer(1, 5),
+    p("Etapa 3 | Faça o login real", "titulo"),
+    p("Substitua o conteúdo de js/login.js. A função devolve o estado inicial e a ação de entrar.", "corpo"),
+    codigo('''function loginComPocketBase() {
+  return {
+    email: '', senha: '', erro: '', carregando: false,
+    async entrar() {
+      this.erro = '';
+      this.carregando = true;
+      try {
+        await window.pb.collection('users')
+          .authWithPassword(this.email, this.senha);
+        window.location.href = 'logado.html';
+      } catch (erro) {
+        this.erro = 'Confira seus dados e o PocketBase.';
+      } finally {
+        this.carregando = false;
+      }
+    },
+  };
+}'''),
+    p("Leia o caminho de execução", "secao"),
     *itens([
-        "isValid verifica apenas se existe um token local ainda não expirado.",
-        "authRefresh faz uma chamada ao servidor e atualiza o token e o registro.",
-        "Enquanto a resposta não chega, a tela diz Verificando login.",
-        "Se a confirmação falhar, o código limpa o estado e volta ao login.",
+        "async/await espera o servidor responder antes de abrir outra página.",
+        "authWithPassword envia e-mail e senha para a coleção Auth users.",
+        "try é o caminho do sucesso; catch trata erro; finally encerra a espera nos dois casos.",
+        "O SDK guarda o token de autenticação no navegador após o sucesso.",
     ]),
-    p("Para sair, limpamos o estado salvo pelo SDK:", "corpo"),
-    codigo("window.pb.authStore.clear();\nwindow.location.replace('login.html');"),
-    Spacer(1, 7),
-    aviso(
-        "Onde fica a proteção dos dados?",
-        "O navegador pode baixar os arquivos HTML e JavaScript. Para dados privados de outras coleções, configure as regras de API no PocketBase. Uma regra de leitura só para usuários autenticados é @request.auth.id != \"\".",
-        FUNDO_LARANJA, LARANJA,
-    ),
-    p("Faça você mesmo", "secao"),
-    *itens([
-        "Entre e atualize a página: o servidor confirma a sessão novamente?",
-        "Clique em Sair e abra logado.html diretamente.",
-        "Abra uma janela anônima e tente visitar logado.html sem login.",
-    ]),
+    aviso("Experimento", "Tente uma senha errada: continue na tela de login. Tente a correta: abra logado.html. Depois abra logado.html diretamente em outra janela; nesta etapa ela ainda não confirma a sessão.", FUNDO_AZUL, VERDE),
+    p("O que significa token?", "secao"),
+    p("É uma credencial emitida pelo servidor depois do login. Em pedidos posteriores, o SDK a envia ao PocketBase. Guardar um token no navegador não prova, sozinho, que a sessão ainda será aceita pelo servidor.", "corpo"),
     PageBreak(),
 ]
 
-# 7. Organização
+# 9. Etapa 4: lógica
 historia += [
-    p("Etapa 5 | Organizar os arquivos", "titulo"),
-    p("Branch: <b>etapa-05-arquivos-organizados</b> e versão final: <b>main</b>", "pequeno"),
-    p("Movemos o CSS e o JavaScript para arquivos próprios. As funções de login e da área do aluno são as mesmas da etapa 4; só mudou onde elas estão escritas.", "corpo"),
-    codigo("login.html\nlogado.html\ncss/estilo.css\njs/pocketbase.js\njs/login.js\njs/logado.js"),
-    p("Responsabilidade de cada arquivo", "secao"),
-    *itens([
-        "login.html contém o formulário; logado.html contém a área do aluno.",
-        "css/estilo.css guarda estilos usados nas duas páginas.",
-        "js/pocketbase.js aponta para o servidor.",
-        "js/login.js envia as credenciais.",
-        "js/logado.js confirma a sessão, mostra o e-mail e permite sair.",
-    ]),
-    p("Por que a ordem dos scripts importa?", "secao"),
-    codigo('<script defer src="...pocketbase.umd.js"></script>\n<script defer src="js/pocketbase.js"></script>\n<script defer src="js/login.js"></script>\n<script defer src="...alpine.min.js"></script>'),
-    p("O navegador lê o HTML e depois executa os scripts defer na ordem escrita. O SDK precisa existir antes de js/pocketbase.js; a função da página precisa existir antes de Alpine iniciar.", "corpo"),
-    aviso(
-        "Volte a uma etapa",
-        "Use git switch etapa-01-html-estatico para ver o primeiro exemplo. Avance uma branch por vez e use git switch main para voltar à versão final.",
-        FUNDO_AZUL, VERDE,
-    ),
+    p("Etapa 4 | Confirme a sessão", "titulo"),
+    p("Branch de referência: etapa-04-sessao-e-saida; versão final: main", "pequeno"),
+    p("Agora a segunda página pergunta ao PocketBase se a sessão ainda vale. Só depois mostra o usuário.", "corpo"),
+    p("Em js/logado.js, crie a função da página", "secao"),
+    codigo('''function paginaLogada() {
+  return {
+    usuario: null,
+    verificando: true,
+    async init() {
+      if (!window.pb.authStore.isValid) {
+        window.location.replace('login.html');
+        return;
+      }
+      try {
+        await window.pb.collection('users').authRefresh();
+        this.usuario = window.pb.authStore.record;
+      } catch (erro) {
+        window.pb.authStore.clear();
+        window.location.replace('login.html');
+      } finally {
+        this.verificando = false;
+      }
+    },
+    sair() {
+      window.pb.authStore.clear();
+      window.location.replace('login.html');
+    },
+  };
+}'''),
+    p("init() é chamado quando Alpine inicia este componente. isValid faz apenas uma checagem local do prazo do token; authRefresh consulta o servidor. clear() apaga o estado de login do SDK.", "corpo"),
     PageBreak(),
 ]
 
-# 8. Verificação e problemas
+# 10. Etapa 4: página e limite de proteção
 historia += [
-    p("Verificar e resolver problemas", "titulo"),
-    p("Se o login não funcionar, siga o caminho da requisição e confira uma parte por vez.", "corpo"),
-    *itens([
-        "O painel abre em http://127.0.0.1:8090/_/?",
-        "A coleção se chama exatamente users e é do tipo Auth?",
-        "O aluno foi cadastrado em users, com e-mail e senha?",
-        "A página abriu por http://127.0.0.1:5500/login.html?",
-        "js/pocketbase.js usa o endereço certo?",
-        "Há internet para carregar Alpine.js e o SDK pelos links CDN?",
-    ]),
-    p("Verificação manual do fluxo", "secao"),
-    *itens([
-        "Senha errada: permanece no login e mostra uma mensagem.",
-        "Credenciais certas: abre a área do aluno e mostra o e-mail.",
-        "Atualização da área: exibe Verificando login e consulta o servidor.",
-        "Sair: limpa o login e volta ao formulário.",
-        "Acesso direto sem sessão: retorna ao login.",
-    ]),
-    p("Sintomas frequentes", "secao"),
-]
-linhas = [
-    [p("SINTOMA", "cabecalho_tabela"), p("CAUSA PROVÁVEL", "cabecalho_tabela"), p("CONFIRA", "cabecalho_tabela")],
-    [p("Não conecta", "celula"), p("PocketBase parado ou endereço diferente", "celula"), p("Terminal e js/pocketbase.js", "celula")],
-    [p("Login falha", "celula"), p("Dados ou coleção incorretos", "celula"), p("Registro em users", "celula")],
-    [p("Estilo não aparece", "celula"), p("Caminho do CSS incorreto", "celula"), p("css/estilo.css no HTML", "celula")],
-    [p("Tela invisível", "celula"), p("Alpine ou outro script não carregou", "celula"), p("Internet e console", "celula")],
-]
-tabela = Table(linhas, colWidths=[45 * mm, 65 * mm, 60 * mm])
-tabela.setStyle(TableStyle([
-    ("BACKGROUND", (0, 0), (-1, 0), AZUL_ESCURO),
-    ("GRID", (0, 0), (-1, -1), 0.45, BORDA),
-    ("VALIGN", (0, 0), (-1, -1), "TOP"),
-    ("LEFTPADDING", (0, 0), (-1, -1), 6),
-    ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-    ("TOPPADDING", (0, 0), (-1, -1), 6),
-    ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-]))
-historia += [
-    tabela, Spacer(1, 8),
-    aviso(
-        "Uma mudança por vez",
-        "Leia a primeira mensagem vermelha no console do navegador, compare os caminhos dos arquivos e corrija um problema por vez.",
-        FUNDO, AZUL,
-    ),
+    p("Etapa 4 | Mostre o usuário e permita sair", "titulo"),
+    p("Em logado.html, carregue os scripts na ordem: SDK do PocketBase, js/pocketbase.js, js/logado.js e Alpine.js. Use as mesmas URLs da etapa 3.", "corpo"),
+    p("No corpo da página", "secao"),
+    codigo('''<main class="cartao" x-data="paginaLogada()" x-cloak>
+  <p x-show="verificando">Verificando login...</p>
+  <section x-show="usuario">
+    <h1>Área do aluno</h1>
+    <p>Você entrou com:</p>
+    <strong x-text="usuario && usuario.email"></strong>
+    <button type="button" @click="sair">Sair</button>
+  </section>
+</main>'''),
+    p("Enquanto verificando é verdadeiro, a página informa que está esperando. usuario começa vazio; após authRefresh, recebe o registro confirmado pelo servidor.", "corpo"),
+    p("Onde os dados privados são protegidos?", "secao"),
+    p("Qualquer pessoa pode baixar HTML, CSS e JS. O redirecionamento melhora o uso da página, mas dados privados precisam de regras de API no PocketBase. Em uma coleção com registros privados, uma regra de leitura para contas autenticadas pode ser:", "corpo"),
+    codigo('@request.auth.id != ""'),
+    aviso("Faça o teste", "Entre, atualize logado.html, clique em Sair e tente abrir a página diretamente. Depois repita em uma janela anônima. Explique em cada caso o que o navegador sabe e o que o servidor confirma.", FUNDO_LARANJA, LARANJA),
     PageBreak(),
 ]
 
-# 9. Glossário e desafios
+# 11. Reconstrução independente
 historia += [
-    p("Glossário e desafios", "titulo"),
-    p("Palavras usadas no projeto", "secao"),
+    p("Agora reconstrua sem olhar o código pronto", "titulo"),
+    p("Feche as branches de referência. Em uma pasta vazia, use este roteiro. Só consulte a branch correspondente depois de tentar localizar o problema.", "corpo"),
+    p("Lista de construção", "secao"),
     *itens([
-        "<b>API</b>: interface pela qual um programa pede dados ou serviços a outro.",
+        "1. Crie login.html, logado.html, css/estilo.css, js/login.js e js/logado.js.",
+        "2. Ligue o CSS e os JS ao HTML. Faça o link entre as páginas. Deixe Entrar desativado.",
+        "3. Sirva os arquivos pela porta 5500. Observe os estilos nas duas páginas.",
+        "4. Carregue Alpine.js, defina formulario() em js/login.js e mostre o e-mail digitado com x-model e x-text.",
+        "5. Inicie o PocketBase, crie users do tipo Auth e cadastre um aluno fictício.",
+        "6. Crie js/pocketbase.js. Carregue SDK, configuração, JS da página e Alpine nessa ordem.",
+        "7. Ative o formulário e implemente authWithPassword com try/catch/finally.",
+        "8. Em logado.html, carregue os scripts e confirme a sessão com authRefresh antes de mostrar o e-mail.",
+        "9. Implemente Sair com authStore.clear() e retorno ao login.",
+    ]),
+    p("Critérios para dizer que terminou", "secao"),
+    *itens([
+        "Senha incorreta mostra erro sem abrir a área do aluno.",
+        "Senha correta abre a área e mostra o e-mail cadastrado.",
+        "Atualizar a página confirma a sessão novamente.",
+        "Sair limpa a sessão; acesso direto sem login volta ao formulário.",
+        "Você consegue explicar o papel de cada arquivo sem ler comentários.",
+    ]),
+    aviso("Se travar", "Compare primeiro caminhos de arquivos e ordem dos scripts. Depois confira a coleção users, o endereço do PocketBase e o console do navegador.", FUNDO_AZUL, AZUL),
+    PageBreak(),
+]
+
+# 12. Diagnóstico e conceitos
+historia += [
+    p("Diagnóstico e próximos passos", "titulo"),
+    p("Quando algo falhar, investigue uma causa por vez.", "corpo"),
+    *itens([
+        "Sem estilos: confira o caminho css/estilo.css no link do HTML.",
+        "O e-mail não aparece na etapa 2: confira x-data, x-model, x-text e se a CDN carregou.",
+        "PocketBase não responde: abra http://127.0.0.1:8090/_/ e confira js/pocketbase.js.",
+        "Credenciais falham: confira se users é Auth e se o aluno foi cadastrado nela.",
+        "A tela fica vazia: confira erros no console e a ordem dos scripts defer.",
+        "O login parece sumir: use sempre o mesmo endereço 127.0.0.1 no navegador.",
+    ]),
+    p("Glossário curto", "secao"),
+    *itens([
+        "<b>Estado</b>: valores usados pela interface, como email ou carregando.",
+        "<b>API</b>: forma de um programa pedir uma ação ou dados a outro.",
         "<b>Autenticação</b>: conferir quem está tentando entrar.",
-        "<b>Coleção Auth</b>: coleção especial do PocketBase para contas de usuário.",
-        "<b>Estado</b>: valores em uso na tela, como e-mail, erro ou mensagem.",
-        "<b>Token</b>: credencial emitida pelo servidor após o login.",
-        "<b>Redirecionamento</b>: abrir outra URL por link ou JavaScript.",
-        "<b>Regra de API</b>: condição aplicada pelo servidor ao acesso a uma coleção.",
+        "<b>Sessão</b>: estado de login mantido após a autenticação.",
+        "<b>Token</b>: credencial emitida pelo servidor para pedidos posteriores.",
+        "<b>Regra de API</b>: condição que o servidor aplica antes de devolver dados.",
     ]),
-    p("Desafios para continuar", "secao"),
+    p("Desafios depois de concluir", "secao"),
     *itens([
-        "Adicione um nome ao registro do aluno e mostre-o na área logada.",
-        "Mude o texto do botão durante a espera pela autenticação.",
-        "Altere a cor principal em css/estilo.css e observe as duas páginas.",
-        "Crie uma coleção de exemplo e permita leitura apenas a usuários autenticados.",
+        "Mude a cor do cartão e identifique qual arquivo controla esse visual.",
+        "Mostre um nome cadastrado no registro do aluno, além do e-mail.",
+        "Crie uma coleção de exemplo e restrinja sua leitura a usuários autenticados.",
     ]),
     p("Documentação oficial", "secao"),
-    p(
-        '<link href="https://pocketbase.io/docs/authentication/" color="#2563EB">Autenticação no PocketBase</link><br/>'
-        '<link href="https://pocketbase.io/docs/api-rules-and-filters/" color="#2563EB">Regras de API do PocketBase</link><br/>'
-        '<link href="https://alpinejs.dev/directives/data" color="#2563EB">x-data no Alpine.js</link>',
-        "corpo",
-    ),
-    Spacer(1, 10),
-    aviso(
-        "Ao terminar",
-        "Você terá visto a diferença entre uma página estática, um formulário reativo, uma autenticação no servidor e uma regra que protege dados.",
-        FUNDO_AZUL, VERDE,
-    ),
+    p('<link href="https://alpinejs.dev/directives/model" color="#2563EB">Alpine.js: x-model</link><br/>'
+      '<link href="https://pocketbase.io/docs/authentication/" color="#2563EB">PocketBase: autenticação</link><br/>'
+      '<link href="https://pocketbase.io/docs/api-rules-and-filters/" color="#2563EB">PocketBase: regras de API</link>', "corpo"),
 ]
 
 doc.build(historia, onFirstPage=capa, onLaterPages=pagina)

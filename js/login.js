@@ -1,4 +1,4 @@
-// A mesma função foi usada na etapa 4; aqui apenas saiu do HTML.
+// Etapa 4: o formulário mantém o login e consulta o estado salvo ao abrir.
 function loginComPocketBase() {
   return {
     email: '',

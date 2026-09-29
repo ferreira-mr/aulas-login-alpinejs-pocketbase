@@ -1,4 +1,4 @@
-// A mesma função foi usada na etapa 4; aqui apenas saiu do HTML.
+// Etapa 4: a segunda página confirma a sessão antes de mostrar o aluno.
 function paginaLogada() {
   return {
     usuario: null,
