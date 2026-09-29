@@ -1,0 +1,97 @@
+/* Regras compartilhadas pelas duas páginas. */
+:root {
+  font-family: Arial, sans-serif;
+  color: #1f2937;
+  background: #f3f4f6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+/* Evita mostrar o HTML antes de o Alpine interpretar os atributos x-. */
+[x-cloak] {
+  display: none !important;
+}
+
+/* Cartão central usado nas duas telas. */
+.cartao {
+  width: min(100%, 380px);
+  padding: 32px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 8%);
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 1.6rem;
+}
+
+p {
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+label {
+  display: block;
+  margin: 18px 0 6px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #9ca3af;
+  border-radius: 6px;
+  font: inherit;
+}
+
+input:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+button {
+  width: 100%;
+  margin-top: 22px;
+  padding: 12px;
+  color: white;
+  background: #2563eb;
+  border: 0;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.mensagem-erro {
+  color: #b91c1c;
+}
+
+.boas-vindas {
+  margin-top: 16px;
+  padding: 16px;
+  background: #eff6ff;
+  border-radius: 8px;
+}
+
+/* O botão de saída tem um estilo mais discreto. */
+.botao-secundario {
+  color: #1f2937;
+  background: #e5e7eb;
+}

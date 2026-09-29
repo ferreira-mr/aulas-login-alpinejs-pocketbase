@@ -3,71 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Etapa 4 - Login com PocketBase</title>
-    <style>
-      [x-cloak] { display: none !important; }
-      body { max-width: 420px; margin: 60px auto; padding: 0 20px; font-family: Arial, sans-serif; }
-      label { display: block; margin-top: 16px; }
-      input { width: 100%; padding: 10px; box-sizing: border-box; }
-      button { margin-top: 20px; padding: 10px 16px; color: white; background: #2563eb; border: 0; cursor: pointer; }
-      .erro { color: #b91c1c; }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.28.1/dist/pocketbase.umd.js"></script>
-    <script>
-      // O mesmo endereço do PocketBase precisa ser usado nas duas páginas.
-      window.pb = new PocketBase('http://127.0.0.1:8090');
-    </script>
+    <title>Login dos alunos</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+
+    <!-- Carregamos os scripts em ordem: SDK, configuração, componente e Alpine. -->
+    <script defer src="https://cdn.jsdelivr.net/npm/pocketbase@0.28.1/dist/pocketbase.umd.js"></script>
+    <script defer src="js/pocketbase.js"></script>
+    <script defer src="js/login.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
   </head>
   <body>
-    <main x-data="loginComPocketBase()" x-cloak>
+    <!-- O nome loginApp conecta este HTML ao componente definido em js/login.js. -->
+    <main class="cartao" x-data="loginApp" x-cloak>
       <h1>Entrar</h1>
-      <p>Etapa 4: vamos manter o fluxo de login entre as duas páginas.</p>
+      <p>Use seu e-mail e sua senha para acessar.</p>
 
+      <!-- @submit.prevent chama entrar sem recarregar esta página. -->
       <form @submit.prevent="entrar">
         <label for="email">E-mail</label>
-        <input id="email" type="email" x-model="email" required />
+        <!-- x-model mantém o valor do campo na variável email do Alpine. -->
+        <input
+          id="email"
+          type="email"
+          x-model="email"
+          autocomplete="username"
+          required
+        />
 
         <label for="senha">Senha</label>
-        <input id="senha" type="password" x-model="senha" required />
+        <input
+          id="senha"
+          type="password"
+          x-model="senha"
+          autocomplete="current-password"
+          required
+        />
 
-        <p class="erro" x-show="erro" x-text="erro" role="alert"></p>
+        <!-- A mensagem só aparece quando a variável erro contém texto. -->
+        <p class="mensagem-erro" x-show="erro" x-text="erro" role="alert"></p>
         <button type="submit" :disabled="carregando">
           <span x-text="carregando ? 'Entrando...' : 'Entrar'"></span>
         </button>
       </form>
     </main>
-
-    <script>
-      function loginComPocketBase() {
-        return {
-          email: '',
-          senha: '',
-          erro: '',
-          carregando: false,
-
-          init() {
-            // Se o token salvo ainda for válido, não é preciso mostrar o formulário.
-            if (window.pb.authStore.isValid) {
-              window.location.replace('logado.html');
-            }
-          },
-
-          async entrar() {
-            this.erro = '';
-            this.carregando = true;
-
-            try {
-              await window.pb.collection('users').authWithPassword(this.email, this.senha);
-              window.location.href = 'logado.html';
-            } catch (erro) {
-              this.erro = 'Não foi possível entrar. Confira as credenciais e o PocketBase.';
-            } finally {
-              this.carregando = false;
-            }
-          },
-        };
-      }
-    </script>
   </body>
 </html>

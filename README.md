@@ -1,33 +1,50 @@
-# Etapa 4: estado do login, redirecionamento e saída
+# Login simples com PocketBase e Alpine.js
 
-Nesta etapa, as páginas consultam o estado mantido pelo SDK do PocketBase.
+Projeto didático com duas páginas: login e área do aluno. As branches contam a construção do projeto em etapas cumulativas. Comece pela primeira e avance uma etapa por vez.
 
-## Conceitos
+## Branches da aula
 
-- authStore.isValid informa se o token guardado ainda está dentro do prazo.
-- A página login.html encaminha para logado.html se já houver um token válido.
-- A página logado.html volta ao login quando não há login salvo.
-- authStore.clear apaga o token local e encerra o fluxo neste navegador.
+1. etapa-01-html-estatico - marcação HTML e navegação simples entre páginas.
+2. etapa-02-alpine - estado, campos ligados ao Alpine e envio de formulário simulado.
+3. etapa-03-login-pocketbase - autenticação real com e-mail e senha no PocketBase.
+4. etapa-04-pagina-protegida - redirecionamento quando não há login e botão Sair.
+5. etapa-05-arquivos-organizados - versão final com HTML, CSS e JavaScript separados.
 
-## Pratique
+Para abrir uma etapa:
 
-1. Entre com um usuário válido.
-2. Atualize logado.html: a página continua mostrando o aluno.
-3. Clique em Sair e tente abrir logado.html diretamente.
-4. Confira que o navegador volta para login.html.
+    git switch etapa-01-html-estatico
 
-## Importante sobre segurança
+Para voltar à versão final:
 
-O redirecionamento é uma verificação de interface no navegador. Ele não protege sozinho dados da API. O PocketBase precisa ter regras de acesso configuradas nas coleções que guardam dados.
+    git switch main
 
-## Abrir o exemplo
+O material de apoio em PDF fica em output/pdf/guia-passo-a-passo-login-pocketbase-alpine.pdf.
 
-Mantenha o PocketBase rodando e, em outro terminal, inicie o servidor da página:
+## Preparar o PocketBase
+
+1. Baixe o PocketBase para seu sistema em https://pocketbase.io/ e extraia o arquivo.
+2. Em um terminal na pasta do executável, rode:
+
+       .\pocketbase.exe serve
+
+3. Abra http://127.0.0.1:8090/_/ e crie uma conta de administrador.
+4. Crie uma coleção do tipo Auth chamada users.
+5. Na coleção users, crie um registro com e-mail e senha para o aluno.
+
+## Abrir o projeto
+
+Com o PocketBase rodando, abra outro terminal nesta pasta e inicie um servidor para os arquivos:
 
     py -m http.server 5500
 
-Abra http://127.0.0.1:5500/login.html.
+Abra http://127.0.0.1:5500/login.html. Se py não funcionar, use python -m http.server 5500.
 
-## Próxima etapa
+## Como funciona
 
-Na branch etapa-05-arquivos-organizados, vamos separar HTML, CSS e JavaScript em arquivos próprios.
+- login.html tem o formulário; Alpine chama a função entrar quando o aluno envia.
+- js/login.js usa authWithPassword para conferir as credenciais na coleção users.
+- js/logado.js confere o token salvo, mostra o e-mail e permite sair.
+- js/pocketbase.js guarda o endereço do servidor.
+- css/estilo.css contém os estilos compartilhados pelas duas páginas.
+
+A verificação em logado.html controla a interface no navegador. Para proteger dados, configure também as regras de acesso das coleções no PocketBase.

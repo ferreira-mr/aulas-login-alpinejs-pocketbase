@@ -1,0 +1,4 @@
+# A base local pode conter dados pessoais de alunos.
+pb_data/
+pocketbase
+pocketbase.exe
