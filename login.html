@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Etapa 3 - Login com PocketBase</title>
+    <title>Etapa 4 - Login com PocketBase</title>
     <style>
       [x-cloak] { display: none !important; }
       body { max-width: 420px; margin: 60px auto; padding: 0 20px; font-family: Arial, sans-serif; }
@@ -12,10 +12,9 @@
       button { margin-top: 20px; padding: 10px 16px; color: white; background: #2563eb; border: 0; cursor: pointer; }
       .erro { color: #b91c1c; }
     </style>
-    <!-- O SDK cria um cliente JavaScript para conversar com o PocketBase. -->
     <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.28.1/dist/pocketbase.umd.js"></script>
     <script>
-      // Este endereço aponta para o PocketBase rodando no próprio computador.
+      // O mesmo endereço do PocketBase precisa ser usado nas duas páginas.
       window.pb = new PocketBase('http://127.0.0.1:8090');
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
@@ -23,7 +22,7 @@
   <body>
     <main x-data="loginComPocketBase()" x-cloak>
       <h1>Entrar</h1>
-      <p>Etapa 3: agora o PocketBase confere as credenciais.</p>
+      <p>Etapa 4: vamos manter o fluxo de login entre as duas páginas.</p>
 
       <form @submit.prevent="entrar">
         <label for="email">E-mail</label>
@@ -47,15 +46,19 @@
           erro: '',
           carregando: false,
 
+          init() {
+            // Se o token salvo ainda for válido, não é preciso mostrar o formulário.
+            if (window.pb.authStore.isValid) {
+              window.location.replace('logado.html');
+            }
+          },
+
           async entrar() {
             this.erro = '';
             this.carregando = true;
 
             try {
-              // authWithPassword envia e-mail e senha para a coleção Auth users.
               await window.pb.collection('users').authWithPassword(this.email, this.senha);
-
-              // O SDK guarda o token localmente, para a próxima página poder usá-lo.
               window.location.href = 'logado.html';
             } catch (erro) {
               this.erro = 'Não foi possível entrar. Confira as credenciais e o PocketBase.';

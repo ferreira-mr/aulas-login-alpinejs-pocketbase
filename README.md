@@ -1,32 +1,33 @@
-# Etapa 3: login real com PocketBase
+# Etapa 4: estado do login, redirecionamento e saída
 
-Nesta etapa, trocamos a simulação por uma chamada ao PocketBase.
+Nesta etapa, as páginas consultam o estado mantido pelo SDK do PocketBase.
 
 ## Conceitos
 
-- O SDK é uma biblioteca que facilita as chamadas HTTP para o PocketBase.
-- authWithPassword envia e-mail e senha para a coleção de autenticação.
-- A resposta inclui o registro autenticado e um token.
-- O SDK guarda o token no armazenamento local do navegador, para a outra página recuperar o estado.
+- authStore.isValid informa se o token guardado ainda está dentro do prazo.
+- A página login.html encaminha para logado.html se já houver um token válido.
+- A página logado.html volta ao login quando não há login salvo.
+- authStore.clear apaga o token local e encerra o fluxo neste navegador.
 
-## Preparar o PocketBase
+## Pratique
 
-1. Baixe e inicie o PocketBase: .\pocketbase.exe serve
-2. Abra http://127.0.0.1:8090/_/ e crie uma coleção do tipo Auth chamada users.
-3. Crie um registro de usuário com e-mail e senha.
+1. Entre com um usuário válido.
+2. Atualize logado.html: a página continua mostrando o aluno.
+3. Clique em Sair e tente abrir logado.html diretamente.
+4. Confira que o navegador volta para login.html.
 
-## Abrir o projeto
+## Importante sobre segurança
 
-Em outro terminal, dentro da pasta do projeto:
+O redirecionamento é uma verificação de interface no navegador. Ele não protege sozinho dados da API. O PocketBase precisa ter regras de acesso configuradas nas coleções que guardam dados.
+
+## Abrir o exemplo
+
+Mantenha o PocketBase rodando e, em outro terminal, inicie o servidor da página:
 
     py -m http.server 5500
 
-Abra http://127.0.0.1:5500/login.html e entre com o usuário cadastrado.
-
-## Atenção
-
-A área do aluno ainda não bloqueia quem abre logado.html diretamente. Vamos cuidar disso na etapa 4.
+Abra http://127.0.0.1:5500/login.html.
 
 ## Próxima etapa
 
-Na branch etapa-04-pagina-protegida, a página vai conferir o estado do login e permitir sair.
+Na branch etapa-05-arquivos-organizados, vamos separar HTML, CSS e JavaScript em arquivos próprios.

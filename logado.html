@@ -3,13 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Etapa 3 - Área do aluno</title>
+    <title>Etapa 4 - Área do aluno</title>
     <style>
+      [x-cloak] { display: none !important; }
       body { max-width: 420px; margin: 60px auto; padding: 0 20px; font-family: Arial, sans-serif; }
+      button { margin-top: 20px; padding: 10px 16px; border: 0; cursor: pointer; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.28.1/dist/pocketbase.umd.js"></script>
     <script>
-      // As páginas usam a mesma origem e o SDK recupera o login salvo no navegador.
       window.pb = new PocketBase('http://127.0.0.1:8090');
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
@@ -18,18 +19,31 @@
     <main x-data="paginaLogada()" x-cloak>
       <h1>Área do aluno</h1>
       <p>Login feito com o e-mail:</p>
-      <strong x-text="email"></strong>
-
-      <!-- Nesta etapa a página ainda não bloqueia a visita direta. -->
-      <p>A próxima etapa vai verificar o login e criar o botão Sair.</p>
+      <strong x-text="usuario && usuario.email"></strong>
+      <p>Agora só mostramos este conteúdo quando há um login salvo.</p>
+      <button type="button" @click="sair">Sair</button>
     </main>
 
     <script>
       function paginaLogada() {
         return {
-          email: window.pb.authStore.record
-            ? window.pb.authStore.record.email
-            : 'Nenhum usuário autenticado',
+          usuario: null,
+
+          init() {
+            // Esta verificação controla a tela. Regras de API continuam no PocketBase.
+            if (!window.pb.authStore.isValid) {
+              window.location.replace('login.html');
+              return;
+            }
+
+            this.usuario = window.pb.authStore.record;
+          },
+
+          sair() {
+            // Limpar o authStore remove o login salvo pelo SDK neste navegador.
+            window.pb.authStore.clear();
+            window.location.replace('login.html');
+          },
         };
       }
     </script>
