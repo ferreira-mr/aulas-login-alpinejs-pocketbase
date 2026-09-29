@@ -3,28 +3,53 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Etapa 1 - Login</title>
+    <title>Etapa 2 - Login com Alpine.js</title>
     <style>
+      [x-cloak] { display: none !important; }
       body { max-width: 420px; margin: 60px auto; padding: 0 20px; font-family: Arial, sans-serif; }
       label { display: block; margin-top: 16px; }
       input { width: 100%; padding: 10px; box-sizing: border-box; }
-      .botao { display: inline-block; margin-top: 20px; padding: 10px 16px; background: #2563eb; color: white; text-decoration: none; }
+      button { margin-top: 20px; padding: 10px 16px; color: white; background: #2563eb; border: 0; cursor: pointer; }
+      .erro { color: #b91c1c; }
     </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
   </head>
   <body>
-    <main>
+    <main x-data="loginDemo()" x-cloak>
       <h1>Entrar</h1>
-      <p>Etapa 1: vamos conhecer a estrutura HTML das telas.</p>
+      <p>Etapa 2: Alpine.js vai ler os campos e responder ao formulário.</p>
 
-      <!-- Os campos são visuais nesta etapa. Ainda não conferimos e-mail ou senha. -->
-      <label for="email">E-mail</label>
-      <input id="email" type="email" placeholder="aluno@escola.com" />
+      <form @submit.prevent="entrar">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" x-model="email" />
 
-      <label for="senha">Senha</label>
-      <input id="senha" type="password" placeholder="Sua senha" />
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" x-model="senha" />
 
-      <!-- Este link só navega para outra página; ele não faz autenticação. -->
-      <a class="botao" href="logado.html">Continuar</a>
+        <p class="erro" x-show="erro" x-text="erro" role="alert"></p>
+        <button type="submit">Entrar</button>
+      </form>
     </main>
+
+    <script>
+      function loginDemo() {
+        return {
+          email: '',
+          senha: '',
+          erro: '',
+
+          entrar() {
+            // Esta simulação aceita quaisquer campos preenchidos; ainda não há servidor.
+            if (!this.email.trim() || !this.senha) {
+              this.erro = 'Preencha o e-mail e a senha.';
+              return;
+            }
+
+            // Agora praticamos navegação. A autenticação real vem na etapa seguinte.
+            window.location.href = 'logado.html';
+          },
+        };
+      }
+    </script>
   </body>
 </html>

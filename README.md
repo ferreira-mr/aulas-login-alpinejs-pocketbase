@@ -1,21 +1,24 @@
-# Etapa 1: páginas HTML
+# Etapa 2: interatividade com Alpine.js
 
-Nesta etapa, conhecemos a estrutura básica de duas páginas HTML: login.html e logado.html.
+Nesta etapa, o Alpine.js lê os campos e reage ao envio do formulário.
 
 ## O que praticar
 
-- Identificar títulos, textos, campos e links no HTML.
-- Abrir uma página usando um link para outra página.
-- Perceber que os campos de e-mail e senha ainda não fazem login.
+- x-data guarda o estado da tela.
+- x-model acompanha o que foi digitado.
+- @submit.prevent chama a função sem recarregar o formulário.
+- x-show e x-text exibem uma mensagem de erro.
+
+## Atenção
+
+O login é uma simulação: qualquer e-mail e senha preenchidos levam à outra página. Ainda não existe validação de usuário nem conexão com um servidor.
 
 ## Abrir o exemplo
 
-Na pasta do projeto, inicie um servidor local:
-
     py -m http.server 5500
 
-Abra http://127.0.0.1:5500/login.html. Se py não funcionar, tente python -m http.server 5500.
+Abra http://127.0.0.1:5500/login.html.
 
 ## Próxima etapa
 
-Na branch etapa-02-alpine, o Alpine.js vai responder ao envio do formulário. Ainda será uma simulação, sem PocketBase.
+Na branch etapa-03-login-pocketbase, vamos trocar a simulação por authWithPassword do PocketBase.
