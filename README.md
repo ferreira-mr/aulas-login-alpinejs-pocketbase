@@ -19,3 +19,6 @@ Abra http://127.0.0.1:5500/login.html. Se py não funcionar, tente python -m htt
 ## Próxima etapa
 
 Na branch etapa-02-alpine, o Alpine.js vai responder ao envio do formulário. Ainda será uma simulação, sem PocketBase.
+## Material de apoio
+
+Consulte output/pdf/guia-passo-a-passo-login-pocketbase-alpine.pdf para o passo a passo completo.
