@@ -47,7 +47,7 @@
           carregando: false,
 
           init() {
-            // Se o token salvo ainda for válido, não é preciso mostrar o formulário.
+            // Esta checagem local agiliza a navegação; a outra página consulta o servidor.
             if (window.pb.authStore.isValid) {
               window.location.replace('logado.html');
             }

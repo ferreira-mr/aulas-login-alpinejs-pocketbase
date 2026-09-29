@@ -17,30 +17,45 @@
   </head>
   <body>
     <main x-data="paginaLogada()" x-cloak>
-      <h1>Área do aluno</h1>
-      <p>Login feito com o e-mail:</p>
-      <strong x-text="usuario && usuario.email"></strong>
-      <p>Agora só mostramos este conteúdo quando há um login salvo.</p>
-      <button type="button" @click="sair">Sair</button>
+      <p x-show="verificando" role="status">Verificando login...</p>
+
+      <!-- O conteúdo aparece após o PocketBase confirmar a sessão. -->
+      <section x-show="usuario">
+        <h1>Área do aluno</h1>
+        <p>Login feito com o e-mail:</p>
+        <strong x-text="usuario && usuario.email"></strong>
+        <p>O PocketBase confirmou este login.</p>
+        <button type="button" @click="sair">Sair</button>
+      </section>
     </main>
 
     <script>
       function paginaLogada() {
         return {
           usuario: null,
+          verificando: true,
 
-          init() {
-            // Esta verificação controla a tela. Regras de API continuam no PocketBase.
+          async init() {
+            // isValid só confere se há um token local que ainda não expirou.
             if (!window.pb.authStore.isValid) {
               window.location.replace('login.html');
               return;
             }
 
-            this.usuario = window.pb.authStore.record;
+            try {
+              // authRefresh pergunta ao PocketBase se a sessão continua aceita.
+              await window.pb.collection('users').authRefresh();
+              this.usuario = window.pb.authStore.record;
+            } catch (erro) {
+              // Se o servidor recusar o token, limpamos o estado local.
+              window.pb.authStore.clear();
+              window.location.replace('login.html');
+            } finally {
+              this.verificando = false;
+            }
           },
 
           sair() {
-            // Limpar o authStore remove o login salvo pelo SDK neste navegador.
             window.pb.authStore.clear();
             window.location.replace('login.html');
           },
