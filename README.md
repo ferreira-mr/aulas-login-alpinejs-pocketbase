@@ -31,3 +31,6 @@ Abra http://127.0.0.1:5500/login.html.
 ## Próxima etapa
 
 Na branch etapa-05-arquivos-organizados, vamos separar HTML, CSS e JavaScript em arquivos próprios.
+## Material de apoio
+
+Consulte output/pdf/guia-passo-a-passo-login-pocketbase-alpine.pdf para o passo a passo completo.
