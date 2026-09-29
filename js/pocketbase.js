@@ -1,3 +1,2 @@
-// Endereço do PocketBase. Usa o host acessado no navegador ou 127.0.0.1 como fallback.
-const host = window.location.hostname || '127.0.0.1';
-window.pb = new PocketBase(`http://${host}:8090`);
+// Endereço do PocketBase no servidor da rede local.
+window.pb = new PocketBase('http://10.141.117.19:8090');
