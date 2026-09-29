@@ -3,28 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Etapa 1 - Login</title>
-    <style>
-      body { max-width: 420px; margin: 60px auto; padding: 0 20px; font-family: Arial, sans-serif; }
-      label { display: block; margin-top: 16px; }
-      input { width: 100%; padding: 10px; box-sizing: border-box; }
-      .botao { display: inline-block; margin-top: 20px; padding: 10px 16px; background: #2563eb; color: white; text-decoration: none; }
-    </style>
+    <title>Login dos alunos</title>
+    <!-- O CSS fica separado para servir às duas páginas. -->
+    <link rel="stylesheet" href="css/estilo.css" />
+    <!-- Nesta etapa, o arquivo JS existe, mas ainda não precisa executar nada. -->
+    <script defer src="js/login.js"></script>
   </head>
   <body>
-    <main>
+    <main class="cartao">
       <h1>Entrar</h1>
-      <p>Etapa 1: vamos conhecer a estrutura HTML das telas.</p>
+      <p>Conheça os campos. O login será criado em uma etapa posterior.</p>
 
-      <!-- Os campos são visuais nesta etapa. Ainda não conferimos e-mail ou senha. -->
+      <!-- Os campos ainda não enviam dados. -->
       <label for="email">E-mail</label>
       <input id="email" type="email" placeholder="aluno@escola.com" />
 
       <label for="senha">Senha</label>
       <input id="senha" type="password" placeholder="Sua senha" />
 
-      <!-- Este link só navega para outra página; ele não faz autenticação. -->
-      <a class="botao" href="logado.html">Ver a segunda página</a>
+      <!-- O botão deixa claro que o login ainda não foi implementado. -->
+      <button type="button" disabled>Entrar (em breve)</button>
+
+      <!-- Este link apenas abre outra página. Ele não autentica ninguém. -->
+      <p><a href="logado.html">Conhecer a segunda página</a></p>
     </main>
   </body>
 </html>
