@@ -1,24 +1,32 @@
-# Etapa 2: interatividade com Alpine.js
+# Etapa 3: login real com PocketBase
 
-Nesta etapa, o Alpine.js lê os campos e reage ao envio do formulário.
+Nesta etapa, trocamos a simulação por uma chamada ao PocketBase.
 
-## O que praticar
+## Conceitos
 
-- x-data guarda o estado da tela.
-- x-model acompanha o que foi digitado.
-- @submit.prevent chama a função sem recarregar o formulário.
-- x-show e x-text exibem uma mensagem de erro.
+- O SDK é uma biblioteca que facilita as chamadas HTTP para o PocketBase.
+- authWithPassword envia e-mail e senha para a coleção de autenticação.
+- A resposta inclui o registro autenticado e um token.
+- O SDK guarda o token no armazenamento local do navegador, para a outra página recuperar o estado.
 
-## Atenção
+## Preparar o PocketBase
 
-O login é uma simulação: qualquer e-mail e senha preenchidos levam à outra página. Ainda não existe validação de usuário nem conexão com um servidor.
+1. Baixe e inicie o PocketBase: .\pocketbase.exe serve
+2. Abra http://127.0.0.1:8090/_/ e crie uma coleção do tipo Auth chamada users.
+3. Crie um registro de usuário com e-mail e senha.
 
-## Abrir o exemplo
+## Abrir o projeto
+
+Em outro terminal, dentro da pasta do projeto:
 
     py -m http.server 5500
 
-Abra http://127.0.0.1:5500/login.html.
+Abra http://127.0.0.1:5500/login.html e entre com o usuário cadastrado.
+
+## Atenção
+
+A área do aluno ainda não bloqueia quem abre logado.html diretamente. Vamos cuidar disso na etapa 4.
 
 ## Próxima etapa
 
-Na branch etapa-03-login-pocketbase, vamos trocar a simulação por authWithPassword do PocketBase.
+Na branch etapa-04-pagina-protegida, a página vai conferir o estado do login e permitir sair.
