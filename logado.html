@@ -3,64 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Etapa 4 - Área do aluno</title>
-    <style>
-      [x-cloak] { display: none !important; }
-      body { max-width: 420px; margin: 60px auto; padding: 0 20px; font-family: Arial, sans-serif; }
-      button { margin-top: 20px; padding: 10px 16px; border: 0; cursor: pointer; }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.28.1/dist/pocketbase.umd.js"></script>
-    <script>
-      window.pb = new PocketBase('http://127.0.0.1:8090');
-    </script>
+    <title>Área do aluno</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+
+    <!-- Mesma ordem da página de login: SDK, configuração, página e Alpine. -->
+    <script defer src="https://cdn.jsdelivr.net/npm/pocketbase@0.28.1/dist/pocketbase.umd.js"></script>
+    <script defer src="js/pocketbase.js"></script>
+    <script defer src="js/logado.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
   </head>
   <body>
-    <main x-data="paginaLogada()" x-cloak>
+    <!-- A função paginaLogada vem de js/logado.js. -->
+    <main class="cartao" x-data="paginaLogada()" x-cloak>
       <p x-show="verificando" role="status">Verificando login...</p>
 
-      <!-- O conteúdo aparece após o PocketBase confirmar a sessão. -->
+      <!-- O conteúdo só aparece após a resposta do PocketBase. -->
       <section x-show="usuario">
         <h1>Área do aluno</h1>
-        <p>Login feito com o e-mail:</p>
-        <strong x-text="usuario && usuario.email"></strong>
+        <div class="boas-vindas">
+          <p>Você entrou com:</p>
+          <strong x-text="usuario && usuario.email"></strong>
+        </div>
         <p>O PocketBase confirmou este login.</p>
-        <button type="button" @click="sair">Sair</button>
+        <button class="botao-secundario" type="button" @click="sair">Sair</button>
       </section>
     </main>
-
-    <script>
-      function paginaLogada() {
-        return {
-          usuario: null,
-          verificando: true,
-
-          async init() {
-            // isValid só confere se há um token local que ainda não expirou.
-            if (!window.pb.authStore.isValid) {
-              window.location.replace('login.html');
-              return;
-            }
-
-            try {
-              // authRefresh pergunta ao PocketBase se a sessão continua aceita.
-              await window.pb.collection('users').authRefresh();
-              this.usuario = window.pb.authStore.record;
-            } catch (erro) {
-              // Se o servidor recusar o token, limpamos o estado local.
-              window.pb.authStore.clear();
-              window.location.replace('login.html');
-            } finally {
-              this.verificando = false;
-            }
-          },
-
-          sair() {
-            window.pb.authStore.clear();
-            window.location.replace('login.html');
-          },
-        };
-      }
-    </script>
   </body>
 </html>

@@ -1,40 +1,11 @@
-# Etapa 4: confirmar a sessão e sair
+# Etapa 4 - sessão e saída
 
-## Objetivo
+Projeto completo: duas páginas, arquivos HTML/CSS/JS separados, reatividade com Alpine.js e autenticação com PocketBase.
 
-Conferir o login ao abrir a área do aluno e permitir que o aluno saia.
+Após o login, `logado.html` usa `authRefresh()` para confirmar a sessão no servidor antes de mostrar o e-mail. O botão Sair limpa o estado de autenticação no navegador. A checagem local `authStore.isValid` apenas verifica se há token não expirado; a confirmação vem do PocketBase.
 
-## Observe no código
+Para usar, inicie o PocketBase com `pocketbase.exe serve`, crie a coleção Auth `users` e um aluno no painel `http://127.0.0.1:8090/_/`. Nesta pasta, execute `py -m http.server 5500` e abra `http://127.0.0.1:5500/login.html`. Se `py` não funcionar, use `python -m http.server 5500`. As bibliotecas carregadas por CDN exigem internet.
 
-- authStore.isValid lê o token salvo e verifica se ele ainda não expirou.
-- authRefresh consulta o PocketBase para confirmar a sessão e atualizar o registro.
-- usuario começa vazio; o conteúdo aparece depois da resposta do servidor.
-- verificando mostra uma mensagem enquanto aguardamos.
-- authStore.clear remove o login salvo neste navegador.
+Os arquivos da interface podem ser baixados pelo navegador. Ao adicionar dados privados, configure regras de API nas coleções do PocketBase. Para leitura por usuários autenticados, um exemplo de regra é `@request.auth.id != ""`.
 
-## Experimente
-
-1. Entre com um usuário válido e atualize logado.html.
-2. Clique em Sair e tente abrir logado.html diretamente.
-3. Confira que você volta ao formulário.
-4. Abra uma janela anônima e acesse logado.html sem fazer login.
-
-Mantenha o PocketBase rodando. Em outro terminal, inicie o servidor das páginas:
-
-    py -m http.server 5500
-
-Abra http://127.0.0.1:5500/login.html.
-
-## Dados privados
-
-O navegador consegue baixar os arquivos HTML e JavaScript. O redirecionamento organiza a interface, e authRefresh confirma o token com o servidor. Quando adicionarmos dados privados, as regras de API das coleções também precisam exigir autenticação. Uma regra simples para listar e visualizar registros apenas com login é:
-
-    @request.auth.id != ""
-
-## Material de apoio
-
-Consulte output/pdf/guia-passo-a-passo-login-pocketbase-alpine.pdf para o passo a passo completo.
-
-## Próxima etapa
-
-Na branch etapa-05-arquivos-organizados, vamos mover CSS e JavaScript para arquivos próprios sem mudar o fluxo.
+O guia completo fica em `output/pdf/guia-passo-a-passo-login-pocketbase-alpine.pdf`.
