@@ -3,35 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Etapa 3 - Área do aluno</title>
-    <style>
-      body { max-width: 420px; margin: 60px auto; padding: 0 20px; font-family: Arial, sans-serif; }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.28.1/dist/pocketbase.umd.js"></script>
-    <script>
-      // As páginas usam a mesma origem e o SDK recupera o login salvo no navegador.
-      window.pb = new PocketBase('http://127.0.0.1:8090');
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
+    <title>Segunda página</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+    <script defer src="js/logado.js"></script>
   </head>
   <body>
-    <main x-data="paginaLogada()" x-cloak>
-      <h1>Área do aluno</h1>
-      <p>Login feito com o e-mail:</p>
-      <strong x-text="email"></strong>
-
-      <!-- Nesta etapa a página ainda não bloqueia a visita direta. -->
-      <p>A próxima etapa vai verificar o login e criar o botão Sair.</p>
+    <main class="cartao">
+      <h1>Segunda página</h1>
+      <p>O login bem-sucedido abre esta página. Ainda é possível acessá-la diretamente; isso será tratado na próxima etapa.</p>
+      <p><a href="login.html">Voltar ao login</a></p>
     </main>
-
-    <script>
-      function paginaLogada() {
-        return {
-          email: window.pb.authStore.record
-            ? window.pb.authStore.record.email
-            : 'Nenhum usuário autenticado',
-        };
-      }
-    </script>
   </body>
 </html>
