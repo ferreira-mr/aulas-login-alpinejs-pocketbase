@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Etapa 1 - Login</title>
+    <style>
+      body { max-width: 420px; margin: 60px auto; padding: 0 20px; font-family: Arial, sans-serif; }
+      label { display: block; margin-top: 16px; }
+      input { width: 100%; padding: 10px; box-sizing: border-box; }
+      .botao { display: inline-block; margin-top: 20px; padding: 10px 16px; background: #2563eb; color: white; text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Entrar</h1>
+      <p>Etapa 1: vamos conhecer a estrutura HTML das telas.</p>
+
+      <!-- Os campos são visuais nesta etapa. Ainda não conferimos e-mail ou senha. -->
+      <label for="email">E-mail</label>
+      <input id="email" type="email" placeholder="aluno@escola.com" />
+
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" placeholder="Sua senha" />
+
+      <!-- Este link só navega para outra página; ele não faz autenticação. -->
+      <a class="botao" href="logado.html">Continuar</a>
+    </main>
+  </body>
+</html>
