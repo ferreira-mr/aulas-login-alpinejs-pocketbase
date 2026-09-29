@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Etapa 2 - Login com Alpine.js</title>
+    <title>Etapa 2 - Formulário com Alpine.js</title>
     <style>
       [x-cloak] { display: none !important; }
       body { max-width: 420px; margin: 60px auto; padding: 0 20px; font-family: Arial, sans-serif; }
@@ -11,15 +11,16 @@
       input { width: 100%; padding: 10px; box-sizing: border-box; }
       button { margin-top: 20px; padding: 10px 16px; color: white; background: #2563eb; border: 0; cursor: pointer; }
       .erro { color: #b91c1c; }
+      .mensagem { color: #0f766e; }
     </style>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
   </head>
   <body>
-    <main x-data="loginDemo()" x-cloak>
+    <main x-data="formulario()" x-cloak>
       <h1>Entrar</h1>
-      <p>Etapa 2: Alpine.js vai ler os campos e responder ao formulário.</p>
+      <p>Etapa 2: o formulário responde ao envio, mas ainda não faz login.</p>
 
-      <form @submit.prevent="entrar">
+      <form @submit.prevent="enviar">
         <label for="email">E-mail</label>
         <input id="email" type="email" x-model="email" />
 
@@ -27,26 +28,33 @@
         <input id="senha" type="password" x-model="senha" />
 
         <p class="erro" x-show="erro" x-text="erro" role="alert"></p>
-        <button type="submit">Entrar</button>
+        <p class="mensagem" x-show="mensagem" x-text="mensagem" role="status"></p>
+        <button type="submit">Enviar formulário</button>
       </form>
     </main>
 
     <script>
-      function loginDemo() {
+      function formulario() {
         return {
           email: '',
           senha: '',
           erro: '',
+          mensagem: '',
 
-          entrar() {
-            // Esta simulação aceita quaisquer campos preenchidos; ainda não há servidor.
+          enviar() {
+            this.erro = '';
+            this.mensagem = '';
+
+            // Nesta etapa só lemos os campos no navegador.
             if (!this.email.trim() || !this.senha) {
               this.erro = 'Preencha o e-mail e a senha.';
               return;
             }
 
-            // Agora praticamos navegação. A autenticação real vem na etapa seguinte.
-            window.location.href = 'logado.html';
+            // Não mostramos a senha na tela nem enviamos os dados a um servidor.
+            this.mensagem = 'Formulário preenchido para ' + this.email
+              + '. O login será criado na próxima etapa.';
+            this.senha = '';
           },
         };
       }
